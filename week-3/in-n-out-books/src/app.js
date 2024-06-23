@@ -24,3 +24,16 @@ app.use((err,req,res,next)=>{
 app.listen(3000,()=>{
     console.log("server is running")
 })
+
+app.get("/api/books", async (req, res, next) => {
+    try {
+    const allRecipes = await recipes.find();
+    console.log("All Recipes: ", allRecipes); // Logs all recipes
+    res.send(allRecipes); // Sends response with all books
+    } catch (err) {
+   44
+    console.error("Error: ", err.message); // Logs error message
+    next(err); // Passes error to the next middleware
+    }
+   });
+   In this cod
