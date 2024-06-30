@@ -19,4 +19,28 @@ expect(response.body).toHaveProperty("author", "J.R.R. Tolkien")
         expect(response.body).toHaveProperty("message","invalid id")
        
     })
+    it ("should return a 201 status code when adding a new book", async ()=>{
+        const response = await request(app).post("/api/books").send({
+            "title": "newbook", "author": "Mary Jones"
+        })
+        expect(response.status).toBe(201)
+        expect(response.body).toHaveProperty("title", "newbook")
+       
+    })
+
+    it ("should return a 400 status code when adding a new book with a missing title", async ()=>{
+        const response = await request(app).post("/api/books").send({
+             "author": "Mary Jones"
+        })
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "a title is required")
+       
+    })
+
+    it ("should return a 204 status code when deleting a book", async ()=>{
+        const response = await request(app).delete("/api/books/1")
+        expect(response.status).toBe(204)
+       
+       
+    })
 })
