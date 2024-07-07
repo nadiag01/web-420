@@ -37,6 +37,34 @@ expect(response.body).toHaveProperty("author", "J.R.R. Tolkien")
        
     })
 
+    it ("should return a 204 status code when updating a book", async ()=>{
+        const response = await request(app).put("/api/books/1").send({
+            title: "updated title", author: "updated author"
+        })
+    
+        expect(response.status).toBe(204)
+       // expect(response.body).toHaveProperty("message", "success")//
+       
+    })
+
+    it ("should return a 400 status code when updating a book", async ()=>{
+        const response = await request(app).put("/api/books/a").send({
+            title: "updated title", author: "updated author"
+        })
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "not a number")
+       
+    })
+
+    it ("should return a 400 status code when updating a book", async ()=>{
+        const response = await request(app).put("/api/books/1").send({
+         author: "updated author"
+        })
+        expect(response.status).toBe(400)
+        expect(response.body).toHaveProperty("message", "invalid title")
+       
+    })
+
     it ("should return a 204 status code when deleting a book", async ()=>{
         const response = await request(app).delete("/api/books/1")
         expect(response.status).toBe(204)

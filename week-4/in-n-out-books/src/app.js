@@ -66,6 +66,21 @@ console.error("Error: ", err.message); // Logs error message
     }
 
  })
+ app.put("/api/books/:id",async (req,res)=>{
+    try{
+        const id=parseInt(req.params.id)
+        if(isNaN(id))
+            throw new Error("not a number")
+        if (!req.body.title)
+            throw new Error("invalid title")
+        const book=await books.updateOne(id,req.body)
+        console.log (book)
+        res.status(204).json({message: "success"})
+    }
+    catch(error){
+        res.status(400).json({message: error.message})
+    }
+ })
  app.delete("/api/books/:id",async (req,res,next)=>{
     try{
         const deletedbook =await books.deleteOne(req.params.id)
