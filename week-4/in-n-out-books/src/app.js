@@ -6,9 +6,11 @@ Description: apps.js File
 */
 
 const express=require("express")
+const bcrypt = require("bcrypt")
 const path=require("path")
 const app=express()
 const books=require("../database/books")
+const users = require("../database/users")
 app.use(express.static(path.join(__dirname)))
 app.use(express.json())
 app.get("/",(req,res)=>{
@@ -88,6 +90,24 @@ console.error("Error: ", err.message); // Logs error message
     }
     catch(error){
         res.status(400).json(error)     
+    }
+ })
+
+ app.post("/api/login", async(req,res)=>{
+    try{
+        if (!req.body.email || !req.body.password){
+            return res.status(400).json({message: "a user name and password is required"})   
+        }
+    
+const user= await users.findOne({email: req.body.email})
+console.log (user)
+const checkpassword = bcrypt.compareSync(req.body.password,user.password)
+if (!checkpassword)
+    return res.status(401).json({message: "Unauthorized"})
+res.status(200).json({message: "Authentication successful"})
+    }
+    catch(error){
+        res.status(400).json({message: error})
     }
  })
 

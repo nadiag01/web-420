@@ -71,4 +71,32 @@ expect(response.body).toHaveProperty("author", "J.R.R. Tolkien")
        
        
     })
+
+    it ("should log a user in and return a 200 message status with authentication successful", async ()=>{
+        const response = await request(app).post("/api/login").send({
+            email:"hermione@hogwarts.edu", password: "granger"
+        })
+        expect(response.status).toBe(200)
+       expect(response.body.message).toBe("Authentication successful")
+       
+    })
+
+    it ("should return a 401 status code with an authorized message when logging in with incorrect credentials", async ()=>{
+        const response = await request(app).post("/api/login").send({
+            email:"hermione@hogwarts.edu", password: "cats"
+        })
+        expect(response.status).toBe(401)
+        expect(response.body.message).toBe("Unauthorized")
+       
+    })
+
+    it ("should return a 400 status code with bad request when missing email or password", async ()=>{
+        const response = await request(app).post("/api/login").send({
+            email:"hermione@hogwarts.edu"
+        })
+        expect(response.status).toBe(400)
+        expect(response.body.message).toBe("a user name and password is required")
+       
+       
+    })
 })
